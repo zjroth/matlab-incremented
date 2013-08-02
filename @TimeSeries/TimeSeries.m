@@ -44,5 +44,10 @@ classdef TimeSeries < timeseries
             [nMax, nIdx] = max(this.Data);
             nTime = this.Time(nIdx);
         end
+
+        function objSubseries = subseries(this, dMinTime, dMaxTime)
+            idxs = (this.Time >= dMinTime & this.Time <= dMaxTime);
+            objSubseries = getsamples(this, idxs);
+        end
     end
 end
