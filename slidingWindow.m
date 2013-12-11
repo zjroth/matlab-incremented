@@ -28,8 +28,7 @@
 %    mtxWindows
 %
 %       The list of windows as a 2-column matrix (where each row is a window).
-%       The last window of this list is truncated to lie within the master
-%       window.
+%       Only windows that lie completely within the master window are returned.
 %
 function mtxWindows = slidingWindow(vMasterWindow, dWidth, dStep)
     dMasterWidth = diff(row(vMasterWindow));
@@ -43,5 +42,7 @@ function mtxWindows = slidingWindow(vMasterWindow, dWidth, dStep)
         dStart = dStart + dStep;
     end
 
-    mtxWindows(nWindows, 2) = vMasterWindow(2);
+    if mtxWindows(nWindows, 2) > vMasterWindow(2)
+        mtxWindows(nWindows, :) = [];
+    end
 end
