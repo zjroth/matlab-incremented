@@ -1,27 +1,28 @@
+% vWindow: the time window (seconds) in which to return the PSTH
 % vTimes: in seconds
 % dStd: in seconds
 % dRate: sample rate of the output
-function tsPsth = psth(vFiringTimes, dStd, dRate)
+function [vPsth, vPsthTimes] = psth(vWindow, vFiringTimes, dStd, dRate)
     % Initialize the gaussian window.
     nWidth = 2 * floor(round(6 * dStd * dRate) / 2) + 1;
     nArmWidth = (nWidth - 1) / 2;
-    vWaveForm = gaussfilt(nWidth, 3);
+    vWaveForm = row(gaussfilt(nWidth, 3));
 
     % Find where the firings occur in the returned wave.
-    vFiringIndices = round(vFiringTimes * dRate);
-    vWaveTimes = (min(vFiringIndices) - nArmWidth : max(vFiringIndices) + nArmWidth) ./ dRate;
-    vFiringIndices = vFiringIndices - (min(vFiringIndices) - 1 - nArmWidth);
+    vPsthTimes = (vWindow(1) : (1 / dRate) : vWindow(2));
+    vFiringIndices = round((vFiringTimes - vWindow(1)) * dRate);
 
     % Initialize the return data.
-    vPsth = zeros(max(vFiringIndices) + nArmWidth, 1);
+    vPsth = zeros(size(vPsthTimes));
 
     %
-    vWindow = (-nArmWidth : nArmWidth);
+    vGaussianIndices = (-nArmWidth : nArmWidth);
+    nMaxWindowIndex = length(vPsthTimes);
 
     for i = 1 : length(vFiringIndices)
-        vPsthIndices = vFiringIndices(i) + vWindow;
-        vPsth(vPsthIndices) = vPsth(vPsthIndices) + vWaveForm;
+        vPsthIndices = vFiringIndices(i) + vGaussianIndices;
+        vToKeep = (vPsthIndices >= 1 & vPsthIndices <= nMaxWindowIndex);
+        vPsthIndices = vPsthIndices(vToKeep);
+        vPsth(vPsthIndices) = vPsth(vPsthIndices) + vWaveForm(vToKeep);
     end
-
-    tsPsth = TimeSeries(vPsth, vWaveTimes);
 end
