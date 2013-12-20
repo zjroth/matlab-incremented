@@ -1,8 +1,11 @@
 function hline(y, varargin)
     axesHandle = gca;
-    color = [0, 0, 1];
+    Color = [0, 0, 1];
     parseNamedParams();
 
     xLimits = get(axesHandle, 'XLim');
-    line(xLimits, [y, y], 'Color', color, 'Parent', axesHandle);
+
+    for i = 1 : length(y)
+        line(xLimits, [y(i), y(i)], 'Color', Color, 'Parent', axesHandle);
+    end
 end
