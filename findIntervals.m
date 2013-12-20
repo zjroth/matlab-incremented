@@ -1,5 +1,30 @@
-% mtxIntervals = getIntervals(vIn, asCellArray)
-function intervals = getIntervals(vIn, bAsCellArray)
+%
+% USAGE:
+%
+%    uknIntervals = findIntervals(vIn, <bAsCellArray>)
+%
+% DESCRIPTION:
+%
+%    Find the index intervals where the input vector is nonzero.
+%
+% ARGUMENTS:
+%
+%    vIn
+%
+%       The vector in which to find the intervals
+%
+%    bAsCellArray (default: false)
+%
+%       The vector in which to find the intervals
+%
+% RETURN
+%
+%    uknIntervals
+%
+%       A list of the intervals as either a 2-column matrix (start and end
+%       indices) or as a cell array with full lists.
+%
+function uknIntervals = findIntervals(vIn, bAsCellArray)
     % By default, do not return a cell array.
     if nargin < 2
        bAsCellArray = false;
@@ -28,10 +53,10 @@ function intervals = getIntervals(vIn, bAsCellArray)
     if bAsCellArray
         % If requested, return a cell array where each entry is the full list of
         % indices for an interval.
-        intervals = arrayfun(@colon, vStarts, vEnds, 'Uniform', false);
+        uknIntervals = arrayfun(@colon, vStarts, vEnds, 'UniformOutput', false);
     else
         % ...otherwise, simply piece the starting indices and the ending indices
         % together to get the matrix where each row represents an interval.
-        intervals = [vStarts, vEnds];
+        uknIntervals = [vStarts, vEnds];
     end
 end
