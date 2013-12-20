@@ -63,7 +63,7 @@ function [out, docTopic] = help(varargin)
             docTopic = process.docTopic;
         end
     else
-        strPrepended = regexprep(['|', process.helpStr], '\n', '\n|');
-        process.setHelpText(['|', char(10), strPrepended]);
+        strPrepended = regexprep([char(10), process.helpStr], '\n', '\n|');
+        process.setHelpText(strPrepended(1 : end - 1));
     end
 end
