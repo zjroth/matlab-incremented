@@ -52,6 +52,6 @@ function cellOut = cellmap(fcnMap, varargin)
 
     assert(nArgOut ~= 0, 'cellmap: supplied function outputs no values');
 
-    fcnApply = @(varargin) apply(fcnMap, abs(nArgOut), varargin{:});
+    fcnApply = @(varargin) apply(fcnMap, abs(nArgOut), varargin);
     cellOut = cellfun(fcnApply, cellInputCells{:}, 'UniformOutput', false);
 end
