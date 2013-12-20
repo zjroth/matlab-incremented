@@ -83,3 +83,41 @@ function [imagemtx,cBar,clim] = whiteImage(A,mask,thresh,fig,clim,colors);
         sideBar(cBar,clim);
     end
 end
+
+% function ax = sideBar(cBar,zlim,h);
+function ax = sideBar(cBar,zlim,h);
+    % set values for which plot to add SideBar to (default: gca)
+    if nargin < 3;
+        h = gca;
+        hfig = gcf;
+    else
+        hfig = get(h,'parent');
+    end;
+
+    if nargin < 2;
+        zlim = [0 1];
+    end;
+
+    % legend('RestoreSize',h);  % restore axes to pre-legend size
+    units = get(h,'units');
+    set(h,'units','normalized');
+    pos = get(h,'Position');
+    stripe = 0.075;
+    edge = 0.02;
+    space = 0.05;
+    set(h,'Position',[pos(1) pos(2) pos(3)*(1-stripe-edge-space) pos(4)]);
+    % legend('RecordSize',h);  %set this as the new legend fullsize
+
+    rect = [pos(1)+(1-stripe-edge)*pos(3) pos(2) stripe*pos(3) pos(4)];
+    ax = axes('position',rect);
+    set(h,'units',units);
+
+    axes(ax);
+
+    % most annoying bit is colorbar
+    image(0,zlim(1)+(0:.01:1)*(zlim(2)-zlim(1)), cBar);
+    set(gca, 'ydir', 'normal');
+    set(gca, 'xtick', []);
+    set(gca, 'yaxislocation', 'right');
+    axes(h);
+end
