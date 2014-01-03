@@ -11,6 +11,24 @@
 %       The function to apply to every leaf of the provided structure
 %    stctIn
 %       The structure
+%
+% EXAMPLE:
+%    >> stctIn.field1 = 4;
+%    >> stctIn.field2.a = 5;
+%    >> stctIn.field2.b = 6;
+%    >> stctOut = structmapleaves(@(x) x^2, stctIn);
+%
+%    stctOut =
+%
+%        field1: 16
+%        field2: [1x1 struct]
+%
+%    >> stctOut.field2
+%
+%    ans =
+%
+%        a: 25
+%        b: 36
 function stctOut = structmapleaves(fcnMap, stctIn)
     stctOut = stctIn;
 
