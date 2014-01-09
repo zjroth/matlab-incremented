@@ -1,9 +1,6 @@
 function navigateFigures(nTotalFigures, fcnPlot)
     fig = figure();
 
-    screenSize = get(0, 'ScreenSize');
-    set(fig, 'Position', [0 0 screenSize(3) screenSize(4)]);
-
     set(fig, 'KeyReleaseFcn', @handleKeyPress);
 
     nCurrFigure = 1;
