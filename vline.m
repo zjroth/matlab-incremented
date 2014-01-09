@@ -3,9 +3,9 @@ function vline(x, varargin)
     Color = [0, 0, 1];
     parseNamedParams();
 
-    yLimits = get(axesHandle, 'YLim');
+    vVerticalBounds = get(axesHandle, 'YLim');
 
-    for i = 1 : length(y)
-        line([x(i), x(i)], yLimits, 'Color', Color, 'Parent', axesHandle);
+    for i = 1 : length(x)
+        line([x(i), x(i)], vVerticalBounds, 'Color', Color, 'Parent', axesHandle);
     end
 end
