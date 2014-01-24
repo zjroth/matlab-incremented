@@ -21,7 +21,7 @@ function [mtxMasked, vColorLimits] = masksc(mtxImage, mtxMask, vColor, ...
                                             vColorLimits, mtxColorMap)
     % Argument checking
     assert(isequal(size(mtxImage), size(mtxMask)), ...
-           'maskimage: the image and mask must have the same size');
+           'masksc: the image and mask must have the same size');
 
     if nargin < 4 || isempty(vColorLimits)
         vMaskedVals = mtxImage(mtxMask);
