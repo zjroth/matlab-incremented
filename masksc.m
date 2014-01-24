@@ -17,6 +17,13 @@
 %       A vector of length 2; the minimum and maximum values of the color map
 %    mtxColorMap (default: `jet(64)`)
 %       A 3-column matrix containing RGB triples
+%
+% NOTES:
+%    To plot the result of a call to this function, run the following sequence
+%    of commands:
+%       > image(mtxMasked, 'CDataMapping', 'scaled');
+%       > caxis(vColorLimits);
+%       > colorbar();
 function [mtxMasked, vColorLimits] = masksc(mtxImage, mtxMask, vColor, ...
                                             vColorLimits, mtxColorMap)
     % Argument checking
@@ -48,9 +55,4 @@ function [mtxMasked, vColorLimits] = masksc(mtxImage, mtxMask, vColor, ...
     else
         mtxMasked = mask(arrImage, mtxMask, vColor);
     end
-
-    % Plot it.
-    image(mtxMasked, 'CDataMapping', 'scaled');
-    caxis(vColorLimits);
-    colorbar();
 end
