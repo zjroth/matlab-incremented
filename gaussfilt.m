@@ -30,5 +30,5 @@ function vFilter = gaussfilt(nWidth, dNumStd)
     end
 
     vFilter = gausswin(nWidth, dNumStd);
-    vFilter = filter / sum(filter);
+    vFilter = vFilter / sum(vFilter);
 end
