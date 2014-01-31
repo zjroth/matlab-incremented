@@ -1,7 +1,7 @@
 %
 % USAGE:
 %
-%    cellFiles = findFiles(strDir, strRegexp)
+%    cellFiles = findfiles(strDir, strRegexp)
 %
 % DESCRIPTION:
 %
@@ -24,7 +24,7 @@
 %       A cell array containing the names of the files that match the given
 %       regular expression
 %
-function cellFiles = findFiles(strDir, strRegexp)
+function cellFiles = findfiles(strDir, strRegexp)
     % Get the directory listing.
     stctDirectory = dir(strDir);
 
