@@ -30,7 +30,20 @@ function savefigure(strFilename, hdlFigure)
       case {'.jpg', '.jpeg'}
         print(hdlFigure, '-djpeg', strFilename);
       case '.pdf'
+        % For some reason, matlab will not get the figure dimensions
+        % correct when saving a figure as a PDF. Here, we account for that
+        % by manually setting the paper size.
+        strUnits = get(hdlFigure, 'Units');
+        set(hdlFigure, 'Units', get(hdlFigure, 'PaperUnits'));
+        vPosition = get(hdlFigure, 'Position');
+        set(hdlFigure, 'PaperSize', vPosition([3, 4]));
+
+        % Save the figure as in the other cases.
         print(hdlFigure, '-dpdf', strFilename);
+
+        % Now that we have saved the figure, return the figure units to
+        % their original value.
+        set(hdlFigure, 'Units', strUnits);
       case '.png'
         print(hdlFigure, '-dpng', strFilename);
       otherwise
