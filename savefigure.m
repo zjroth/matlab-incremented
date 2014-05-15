@@ -17,22 +17,22 @@ function savefigure(strFilename, hdlFigure)
     set(gcf,'PaperPositionMode','auto');
 
     if nargin < 2
-        hdlFigure = gca();
+        hdlFigure = gcf();
     end
 
     [~, ~, strFileType] = fileparts(strFilename);
 
     switch strFileType
       case '.bmp'
-        print('-dbmp16m', strFilename);
+        print(hdlFigure, '-dbmp16m', strFilename);
       case '.eps'
-        print('-depsc', strFilename);
+        print(hdlFigure, '-depsc', strFilename);
       case {'.jpg', '.jpeg'}
-        print('-djpeg', strFilename);
+        print(hdlFigure, '-djpeg', strFilename);
       case '.pdf'
-        print('-dpdf', strFilename);
+        print(hdlFigure, '-dpdf', strFilename);
       case '.png'
-        print('-dpng', strFilename);
+        print(hdlFigure, '-dpng', strFilename);
       otherwise
         error(['savefigure: unrecognized file type "' strFileType '"']);
     end
