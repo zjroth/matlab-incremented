@@ -1,6 +1,6 @@
 function parseNamedParams(validNames)
-    % Our list of parameters is `varargin` from the workspace of the
-    % function that invoked this function.
+    % Our list of parameters is `varargin` from the workspace of the function
+    % that invoked this function.
     paramList = evalin('caller', 'varargin');
 
     % The number of named parameters represented by the parameter list.
@@ -30,21 +30,20 @@ function parseNamedParams(validNames)
         name = paramList{idx};
         val = paramList{idx + 1};
 
-        % Complain if the parameter name is not a valid matlab variable
-        % name.
-        if isvarname(name)
-            % Complain if the parameter name is not allowed by the caller
-            % function.
-            if isAllowedName(name)
-                % If we've made it this far, then we want to assign the
-                % provided value for the parameter name in the workspace
-                % of the function that invoked this function.
-                assignin('caller', name, val);
-            else
-                error(['parseNamedParams: invalid named parameter: ' name]);
-            end
-        else
-            error(['parseNamedParams: invalid parameter name: ' name]);
+        % Complain if the parameter name is not a valid matlab variable name or
+        % if the parameter name is not allowed by the caller function.
+        if ~isvarname(name) || ~isAllowedName(name)
+            % Retrieve the name of the caller function.
+            callStack = dbstack();
+            nameOfCaller = callStack(2).name;
+
+            % Issue the error.
+            error([nameOfCaller ': invalid parameter name: ' name]);
         end
+
+        % If we've made it this far, then we want to assign the provided value
+        % for the parameter name in the workspace of the function that invoked
+        % this function.
+        assignin('caller', name, val);
     end
 end
