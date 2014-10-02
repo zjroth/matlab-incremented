@@ -8,13 +8,17 @@
 %    uknColors
 %       The list of colors, either a 3-column matrix or a cell array of fixed
 %       colors (e.g., `'r'`) and/or vectors of length 3.
-%    nMapSize
+%    nMapSize (default: 64)
 %       The size of the resultant map
 %
 % RETURNS:
 %    mtxMap
 %       The newly-created colormap (a 3-column matrix)
 function mtxMap = createcolormap(uknColors, nMapSize)
+    if nargin < 2
+        nMapSize = 64;
+    end
+    
     mtxColors = toColorMatrix(uknColors);
     nColors = size(mtxColors, 1);
     mtxMap = zeros(nMapSize, 3);
@@ -33,24 +37,24 @@ end
 function mtxColors = toColorMatrix(uknColors)
     if ~iscell(uknColors)
         mtxColors = uknColors;
-    end
+    else
+        cellColors = uknColors;
+        nColors = length(cellColors);
+        mtxColors = zeros(nColors, 3);
 
-    cellColors = uknColors;
-    nColors = length(cellColors);
-    mtxColors = zeros(nColors, 3);
+        for i = 1 : nColors
+            uknColor = cellColors{i};
 
-    for i = 1 : nColors
-        uknColor = cellColors{i};
+            if isa(uknColor, 'char')
+                vColor = charToColor(uknColor);
+            else
+                vColor = row(uknColor);
+                assert(length(vColor) == 3, ...
+                       ['cmap: unrecognized color ' num2str(uknColor)]);
+            end
 
-        if isa(uknColor, 'char')
-            vColor = charToColor(uknColor);
-        else
-            vColor = row(uknColor);
-            assert(length(vColor) == 3, ...
-                   ['cmap: unrecognized color ' num2str(uknColor)]);
+            mtxColors(i, :) = vColor;
         end
-
-        mtxColors(i, :) = vColor;
     end
 end
 

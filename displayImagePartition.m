@@ -17,10 +17,10 @@ function displayImagePartition(mtxImage, vPartitionSizesX, vPartitionSizesY)
     vDividersY(end) = [];
 
     for nDivider = vDividersX
-        vline(nDivider + 0.5);
+        vline(nDivider + 0.5, 'Color', 'k');
     end
 
     for nDivider = vDividersY
-        hline(nDivider + 0.5);
+        hline(nDivider + 0.5, 'Color', 'k');
     end
 end

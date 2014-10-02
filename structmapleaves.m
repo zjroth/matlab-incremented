@@ -29,15 +29,30 @@
 %
 %        a: 25
 %        b: 36
-function stctOut = structmapleaves(fcnMap, stctIn)
-    stctOut = stctIn;
+function stctOut = structmapleaves(fcnMap, stctIn, bFlatten)
+    if nargin < 3
+        bFlatten = false;
+    end
+
+    if bFlatten
+        stctOut = [];
+    else
+        stctOut = stctIn;
+    end
 
     if isa(stctIn, 'struct')
-        cellFields = fieldnames(stctOut);
+        cellFields = fieldnames(stctIn);
 
         for i = 1 : length(cellFields)
             strField = cellFields{i};
-            stctOut.(strField) = structmapleaves(fcnMap, stctOut.(strField));
+
+            if bFlatten
+                stctOut = vertcat(stctOut, structmapleaves( ...
+                    fcnMap, stctIn.(strField), true));
+            else
+                stctOut.(strField) = structmapleaves( ...
+                    fcnMap, stctIn.(strField), bFlatten);
+            end
         end
     else
         stctOut = fcnMap(stctIn);

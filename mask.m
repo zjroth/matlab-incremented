@@ -26,9 +26,11 @@ function arrMasked = mask(arrImage, mtxMask, vColor)
     assert(isequal(size(arrImage), [size(mtxMask), 3]), ...
            'mask: the image and mask must have the same size');
 
-    arrMasked = zeros(size(arrImage));
-    arrMask = repmat(mtxMask, [1, 1, 3]);
+    arrMasked = arrImage;
 
-    arrMasked(arrMask) = arrImage(arrMask);
-    arrMasked(~arrMask) = repmat(vColor, nnz(~mtxMask), 1);
+    mtxFalses = false(size(mtxMask));
+    mtxNotMask = ~mtxMask;
+    arrMasked(cat(3, mtxNotMask, mtxFalses, mtxFalses)) = vColor(1);
+    arrMasked(cat(3, mtxFalses, mtxNotMask, mtxFalses)) = vColor(2);
+    arrMasked(cat(3, mtxFalses, mtxFalses, mtxNotMask)) = vColor(3);
 end
