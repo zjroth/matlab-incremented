@@ -1,9 +1,7 @@
 % USAGE:
-%
 %    vOut = normalize(vIn, p)
 %
 % DESCRIPTION:
-%
 %    Normalize a vector
 function vOut = normalize(vIn, p)
     assert(isvector(vIn), 'normalize: the input must be a vector');
