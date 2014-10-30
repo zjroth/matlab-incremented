@@ -1,29 +1,19 @@
-%
 % USAGE:
-%
 %    uknIntervals = findIntervals(vIn, <bAsCellArray>)
 %
 % DESCRIPTION:
-%
 %    Find the index intervals where the input vector is nonzero.
 %
 % ARGUMENTS:
-%
 %    vIn
-%
 %       The vector in which to find the intervals
-%
 %    bAsCellArray (default: false)
-%
 %       The vector in which to find the intervals
 %
 % RETURN
-%
 %    uknIntervals
-%
 %       A list of the intervals as either a 2-column matrix (start and end
 %       indices) or as a cell array with full lists.
-%
 function uknIntervals = findIntervals(vIn, bAsCellArray)
     % By default, do not return a cell array.
     if nargin < 2
