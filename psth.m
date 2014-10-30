@@ -3,26 +3,19 @@
 % dStd: in seconds
 % dRate: sample rate of the output
 function [vPsth, vPsthTimes] = psth(vWindow, vFiringTimes, dStd, dRate)
-    % Initialize the gaussian window.
-    nWidth = 2 * floor(round(6 * dStd * dRate) / 2) + 1;
-    nArmWidth = (nWidth - 1) / 2;
-    vWaveForm = row(gaussfilt(nWidth, 3));
-
-    % Find where the firings occur in the returned wave.
+    % Initialize the return variables.
     vPsthTimes = (vWindow(1) : (1 / dRate) : vWindow(2));
-    vFiringIndices = round((vFiringTimes - vWindow(1)) * dRate);
+    nLength = length(vPsthTimes);
 
-    % Initialize the return data.
-    vPsth = zeros(size(vPsthTimes));
+    % Convert the list of points to lists of indices.
+    vIndices = ceil((vFiringTimes - vWindow(1)) * dRate);
+    vIndices = clamp(vIndices, 1, nLength);
 
-    %
-    vGaussianIndices = (-nArmWidth : nArmWidth);
-    nMaxWindowIndex = length(vPsthTimes);
+    % Represent the points in the return matrix.
+    vPsth = accumarray(vIndices, 1, [nLength, 1]);
 
-    for i = 1 : length(vFiringIndices)
-        vPsthIndices = vFiringIndices(i) + vGaussianIndices;
-        vToKeep = (vPsthIndices >= 1 & vPsthIndices <= nMaxWindowIndex);
-        vPsthIndices = vPsthIndices(vToKeep);
-        vPsth(vPsthIndices) = vPsth(vPsthIndices) + vWaveForm(vToKeep);
-    end
+    % Smooth the resultant matrix with a gaussian window.
+    nWidth = 2 * floor(round(6 * dStd * dRate) / 2) + 1;
+    vWaveForm = row(gausswin(nWidth, 3));
+    vPsth = conv(vPsth, vWaveForm, 'same');
 end
