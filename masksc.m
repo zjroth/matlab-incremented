@@ -1,9 +1,9 @@
 % USAGE:
-%    [mtxMasked, vColorLimits] = masksc(mtxImage, mtxMask, vColor, ...
-%                                       vColorLimits, mtxColorMap)
+%    h = masksc(mtxImage, mtxMask, vColor)
 %
 % DESCRIPTION:
-%    Mask an image; similar to `imagesc`
+%    Similar to `imagesc` followed by `mask`. Also, reset the color scale
+%    based on the non-masked values.
 %
 % ARGUMENTS:
 %    mtxImage
@@ -13,46 +13,27 @@
 %       be masked with color and `true` elsewhere.
 %    vColor (default: [1, 1, 1])
 %       The color to mask the image with as an RGB triple; defaults to white
-%    vColorLimits (default: max and min in displayed part of `mtxImage`)
-%       A vector of length 2; the minimum and maximum values of the color map
-%    mtxColorMap (default: `jet(64)`)
-%       A 3-column matrix containing RGB triples
-%
-% NOTES:
-%    To plot the result of a call to this function, run the following sequence
-%    of commands:
-%       > image(mtxMasked, 'CDataMapping', 'scaled');
-%       > caxis(vColorLimits);
-%       > colorbar();
-function [mtxMasked, vColorLimits] = masksc(mtxImage, mtxMask, vColor, ...
-                                            vColorLimits, mtxColorMap)
-    % Argument checking
+function [hdlImage, hdlMask] = masksc(mtxImage, mtxMask, vColor)
+    % Ensure that the image and mask are the same size. This is a somewhat
+    % artificial requirement since the code will run without this check.
     assert(isequal(size(mtxImage), size(mtxMask)), ...
-           'masksc: the image and mask must have the same size');
+           'masksc: the image and mask must have the same dimensions');
 
-    if nargin < 4 || isempty(vColorLimits)
-        vMaskedVals = mtxImage(mtxMask);
-        vColorLimits = [min(vMaskedVals), max(vMaskedVals)];
-    end
+    % Plot the image using `imagesc`, then make the masked parts transparent.
+    hdlImage = imagesc(mtxImage);
 
-    if nargin < 5
-        mtxColorMap = jet(64);
-    end
+    % Mask the image.
+    hdlMask = mask(mtxMask, vColor);
 
-    % Clamp the image to the given range.
-    mtxClamped = (mtxImage - vColorLimits(1)) / diff(vColorLimits);
-    mtxClamped(mtxClamped < 0) = 0;
-    mtxClamped(mtxClamped >= 1) = 1 - eps;
+    % The plot limits get offset when we show the background (i.e., the mask
+    % color). Set the correct limits here.
+    xlim([0.5, size(mtxImage, 2) + 0.5])
+    ylim([0.5, size(mtxImage, 1) + 0.5])
 
-    % Map the clamped values to row indices of the color map, and then build
-    % the image from that information.
-    mtxColorIndices = floor(mtxClamped * size(mtxColorMap, 1)) + 1;
-    arrImage = reshape(mtxColorMap(mtxColorIndices(:), :), [size(mtxImage), 3]);
+    % Reset the color limits.
+    vShownValues = mtxImage(mtxMask);
 
-    % Now simply mask the image array.
-    if nargin < 3 || isempty(vColor);
-        mtxMasked = mask(arrImage, mtxMask);
-    else
-        mtxMasked = mask(arrImage, mtxMask, vColor);
+    if ~isempty(vShownValues)
+        clim(minmax(vShownValues));
     end
 end
