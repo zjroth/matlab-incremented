@@ -30,5 +30,5 @@ function cellFiles = findfiles(strDir, strRegexp)
 
     % Keep only those file names that match the given regular expression.
     fcnMatches = @(s) regexptest(s, strRegexp);
-    cellFiles = extract(fcnMatches, {stctDirectory.name});
+    cellFiles = keep(fcnMatches, {stctDirectory.name});
 end

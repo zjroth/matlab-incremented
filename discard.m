@@ -18,5 +18,5 @@
 %    mtxDiscarded
 %       A logical matrix indicating which entries have been discarded
 function [vOut, mtxDiscarded] = discard(fcnTest, mtxIn)
-    [vOut, mtxDiscarded] = extract(@(x) not(fcnTest(x)), mtxIn);
+    [vOut, mtxDiscarded] = keep(@(x) not(fcnTest(x)), mtxIn);
 end
