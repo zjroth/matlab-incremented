@@ -23,7 +23,9 @@
 %         3    10
 function mtxRanges = consecutive(vIn)
     assert(all(isint(vIn)), 'consecutive: input vector must be integer-valued');
-    v = (1 : length(vIn))' - col(vIn);
+
+    vInput = row(vIn);
+    v = (1 : length(vInput)) - vInput;
     mtxIntervals = constant(v, 0.5);
-    mtxRanges = vIn(mtxIntervals);
+    mtxRanges = vInput(mtxIntervals);
 end

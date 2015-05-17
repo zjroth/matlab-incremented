@@ -19,6 +19,10 @@ function [hdlImage, hdlMask] = masksc(mtxImage, mtxMask, vColor)
     assert(isequal(size(mtxImage), size(mtxMask)), ...
            'masksc: the image and mask must have the same dimensions');
 
+    if nargin < 3
+        vColor = [1, 1, 1];
+    end
+
     % Plot the image using `imagesc`, then make the masked parts transparent.
     hdlImage = imagesc(mtxImage);
 
