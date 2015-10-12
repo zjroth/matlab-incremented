@@ -1,0 +1,5 @@
+* Description
+
+This project contains MATLAB functions that I have written to fill in
+(perceived) gaps in the built-in function base of MATLAB. I find many of the
+functions herein to be useful in my everyday MATLAB usage.
